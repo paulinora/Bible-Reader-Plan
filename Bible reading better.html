@@ -1,0 +1,1452 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daily Bible Reading</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=swap" rel="stylesheet">
+    <style>
+        /* Base variables (Summer / Ordinary Time - Default) */
+        :root {
+            --bg-color: #e0f7fa; /* light cyan */
+            --text-color: #004d40; /* dark teal */
+            --card-bg-color: #ffffff;
+            --card-border-color: #b2ebf2; /* lighter cyan */
+            --header-text-color: #006064; /* darker cyan */
+            --subheader-text-color: #00796b; /* teal */
+            --reading-bg-color: #ffffff;
+            --reading-border-color: #80deea; /* cyan */
+            --reading-passage-color: #004d40;
+            --reading-heading-color: #006064;
+            --reading-note-color: #00796b;
+            --event-note-color: #004d40; /* Keep event notes distinct */
+            --plan-note-color: #00796b;
+            --highlight-color: #ffeb3b; /* bright yellow */
+            --button-bg-color: #4caf50; /* green */
+            --button-text-color: #ffffff;
+            --button-hover-bg-color: #388e3c; /* darker green */
+            --link-bg-color: #81d4fa; /* light blue */
+            --link-text-color: #01579b; /* dark blue */
+            --link-border-color: #4fc3f7; /* blue */
+            --link-hover-bg-color: #4fc3f7;
+            --link-hover-text-color: #01579b;
+            --input-border-color: #4dd0e1; /* cyan */
+            --search-label-color: #006064;
+            --info-text-color: #00796b;
+            --footer-text-color: #00796b;
+        }
+
+        /* --- Seasonal Themes --- */
+
+        /* Spring (Post-Epiphany, Pre-Lent) */
+        .theme-spring {
+             --bg-color: #e8f5e9; /* pale green */
+            --text-color: #2e7d32; /* medium green */
+            --card-bg-color: #ffffff;
+            --card-border-color: #c8e6c9; /* light green */
+            --header-text-color: #1b5e20; /* dark green */
+            --subheader-text-color: #388e3c; /* darker green */
+            --reading-bg-color: #e3f2fd; /* pale blue */
+            --reading-border-color: #bbdefb; /* light blue */
+            --reading-passage-color: #2e7d32;
+            --reading-heading-color: #1b5e20;
+            --reading-note-color: #388e3c;
+            --event-note-color: #0277bd; /* Light blue for event notes */
+            --plan-note-color: #388e3c;
+            --highlight-color: #fce4ec; /* light pink */
+            --button-bg-color: #66bb6a; /* light green */
+            --button-text-color: #ffffff;
+            --button-hover-bg-color: #4caf50; /* medium green */
+            --link-bg-color: #f3e5f5; /* pale purple */
+            --link-text-color: #6a1b9a; /* purple */
+            --link-border-color: #e1bee7; /* light purple */
+            --link-hover-bg-color: #e1bee7;
+            --link-hover-text-color: #6a1b9a;
+            --input-border-color: #a5d6a7; /* mint green */
+            --search-label-color: #1b5e20;
+            --info-text-color: #388e3c;
+            --footer-text-color: #388e3c;
+        }
+
+        /* Easter */
+        .theme-easter {
+            --bg-color: #fce4ec; /* light pink */
+            --text-color: #5e35b1; /* deep purple */
+            --card-bg-color: #ffffff;
+            --card-border-color: #f8bbd0; /* pink */
+            --header-text-color: #8e24aa; /* purple */
+            --subheader-text-color: #ab47bc; /* lighter purple */
+            --reading-bg-color: #fffde7; /* pale yellow */
+            --reading-border-color: #f48fb1; /* light pink */
+            --reading-passage-color: #5e35b1;
+            --reading-heading-color: #8e24aa;
+            --reading-note-color: #ab47bc;
+            --event-note-color: #d81b60; /* Hot pink for event notes */
+            --plan-note-color: #ab47bc;
+            --highlight-color: #a5d6a7; /* mint green */
+            --button-bg-color: #ce93d8; /* light purple */
+            --button-text-color: #4a148c; /* dark purple */
+            --button-hover-bg-color: #ba68c8; /* darker light purple */
+            --link-bg-color: #e1f5fe; /* pale blue */
+            --link-text-color: #5e35b1;
+            --link-border-color: #b3e5fc;
+            --link-hover-bg-color: #b3e5fc;
+            --link-hover-text-color: #5e35b1;
+            --input-border-color: #f48fb1;
+            --search-label-color: #8e24aa;
+            --info-text-color: #ab47bc;
+            --footer-text-color: #ab47bc;
+        }
+
+        /* Fall / Ordinary Time (Pre-Advent) */
+        .theme-fall {
+            --bg-color: #fff3e0; /* pale orange */
+            --text-color: #3e2723; /* dark brown */
+            --card-bg-color: #ffffff;
+            --card-border-color: #ffccbc; /* light peach */
+            --header-text-color: #4e342e; /* darker brown */
+            --subheader-text-color: #5d4037; /* brown */
+            --reading-bg-color: #fbe9e7; /* lighter peach */
+            --reading-border-color: #ffab91; /* peach */
+            --reading-passage-color: #3e2723;
+            --reading-heading-color: #4e342e;
+            --reading-note-color: #5d4037;
+            --event-note-color: #bf360c; /* Deep orange for event notes */
+            --plan-note-color: #5d4037;
+            --highlight-color: #d84315; /* deep orange */
+            --button-bg-color: #a1887f; /* brownish gray */
+            --button-text-color: #ffffff;
+            --button-hover-bg-color: #8d6e63; /* darker brownish gray */
+            --link-bg-color: #ffecb3; /* pale yellow */
+            --link-text-color: #e65100; /* dark orange */
+            --link-border-color: #ffe082; /* light yellow */
+            --link-hover-bg-color: #ffe082;
+            --link-hover-text-color: #e65100;
+            --input-border-color: #ffab91;
+            --search-label-color: #4e342e;
+            --info-text-color: #5d4037;
+            --footer-text-color: #5d4037;
+        }
+
+        /* Advent */
+        .theme-advent {
+            --bg-color: #e8eaf6; /* indigo light */
+            --text-color: #1a237e; /* dark indigo */
+            --card-bg-color: #ffffff;
+            --card-border-color: #c5cae9; /* lighter indigo */
+            --header-text-color: #283593; /* indigo */
+            --subheader-text-color: #303f9f; /* darker indigo */
+            --reading-bg-color: #ede7f6; /* light purple */
+            --reading-border-color: #b39ddb; /* purple */
+            --reading-passage-color: #1a237e;
+            --reading-heading-color: #283593;
+            --reading-note-color: #303f9f;
+            --event-note-color: #e91e63; /* Pink for Gaudete/event notes */
+            --plan-note-color: #303f9f;
+            --highlight-color: #e91e63; /* pink */
+            --button-bg-color: #3f51b5; /* indigo */
+            --button-text-color: #ffffff;
+            --button-hover-bg-color: #303f9f; /* darker indigo */
+            --link-bg-color: #d1c4e9; /* very light purple */
+            --link-text-color: #311b92; /* deep purple */
+            --link-border-color: #b39ddb;
+            --link-hover-bg-color: #b39ddb;
+            --link-hover-text-color: #311b92;
+            --input-border-color: #9fa8da; /* light indigo */
+            --search-label-color: #283593;
+            --info-text-color: #303f9f;
+            --footer-text-color: #303f9f;
+        }
+
+        /* Christmas */
+        .theme-christmas {
+            --bg-color: #e8f5e9; /* pale green */
+            --text-color: #1b5e20; /* dark green */
+            --card-bg-color: #ffffff;
+            --card-border-color: #c8e6c9; /* light green */
+            --header-text-color: #2e7d32; /* green */
+            --subheader-text-color: #388e3c; /* darker green */
+            --reading-bg-color: #fff9c4; /* pale yellow */
+            --reading-border-color: #ffecb3; /* yellow */
+            --reading-passage-color: #1b5e20;
+            --reading-heading-color: #2e7d32;
+            --reading-note-color: #388e3c;
+            --event-note-color: #c62828; /* Red for event notes */
+            --plan-note-color: #388e3c;
+            --highlight-color: #ffd700; /* gold */
+            --button-bg-color: #c62828; /* red */
+            --button-text-color: #ffffff;
+            --button-hover-bg-color: #b71c1c; /* darker red */
+            --link-bg-color: #a5d6a7; /* light green */
+            --link-text-color: #1b5e20;
+            --link-border-color: #81c784;
+            --link-hover-bg-color: #81c784;
+            --link-hover-text-color: #1b5e20;
+            --input-border-color: #ef9a9a; /* light red */
+            --search-label-color: #2e7d32;
+            --info-text-color: #388e3c;
+            --footer-text-color: #388e3c;
+        }
+
+         /* Epiphany */
+        .theme-epiphany {
+            --bg-color: #fffde7; /* Very Pale Yellow */
+            --text-color: #1b5e20; /* Dark Green */
+            --card-bg-color: #ffffff;
+            --card-border-color: #fff9c4; /* Pale Yellow */
+            --header-text-color: #2e7d32; /* Green */
+            --subheader-text-color: #388e3c; /* Darker Green */
+            --reading-bg-color: #f1f8e9; /* Light Green */
+            --reading-border-color: #dcedc8; /* Lighter Green */
+            --reading-passage-color: #1b5e20;
+            --reading-heading-color: #2e7d32;
+            --reading-note-color: #388e3c;
+            --event-note-color: #f57f17; /* Gold/Yellow for event notes */
+            --plan-note-color: #388e3c;
+            --highlight-color: #fbc02d; /* Yellow Gold */
+            --button-bg-color: #388e3c; /* Darker Green */
+            --button-text-color: #ffffff;
+            --button-hover-bg-color: #2e7d32; /* Green */
+            --link-bg-color: #fff59d; /* Light Gold */
+            --link-text-color: #1b5e20;
+            --link-border-color: #fff176; /* Gold */
+            --link-hover-bg-color: #fff176;
+            --link-hover-text-color: #1b5e20;
+            --input-border-color: #fff9c4;
+            --search-label-color: #2e7d32;
+            --info-text-color: #388e3c;
+            --footer-text-color: #388e3c;
+        }
+
+
+        /* Lent */
+        .theme-lent {
+            --bg-color: #f3e5f5; /* pale purple */
+            --text-color: #4a148c; /* dark purple */
+            --card-bg-color: #ffffff;
+            --card-border-color: #e1bee7; /* light purple */
+            --header-text-color: #6a1b9a; /* purple */
+            --subheader-text-color: #7b1fa2; /* darker purple */
+            --reading-bg-color: #efebe9; /* brownish gray */
+            --reading-border-color: #d7ccc8; /* lighter brownish gray */
+            --reading-passage-color: #4a148c;
+            --reading-heading-color: #6a1b9a;
+            --reading-note-color: #7b1fa2;
+            --event-note-color: #4a148c; /* Dark purple for event notes */
+            --plan-note-color: #7b1fa2;
+            --highlight-color: #ce93d8; /* light purple */
+            --button-bg-color: #8e24aa; /* purple */
+            --button-text-color: #ffffff;
+            --button-hover-bg-color: #7b1fa2; /* darker purple */
+            --link-bg-color: #e1bee7; /* light purple */
+            --link-text-color: #4a148c;
+            --link-border-color: #ce93d8;
+            --link-hover-bg-color: #ce93d8;
+            --link-hover-text-color: #4a148c;
+            --input-border-color: #ce93d8;
+            --search-label-color: #6a1b9a;
+            --info-text-color: #7b1fa2;
+            --footer-text-color: #7b1fa2;
+        }
+
+        /* --- Base Styles using Variables --- */
+        body {
+            font-family: 'Source Serif 4', serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.7;
+            transition: background-color 0.5s ease, color 0.5s ease; /* Smooth theme transition */
+        }
+        .highlight {
+            color: var(--highlight-color);
+            font-weight: 600;
+        }
+        .card {
+            background-color: var(--card-bg-color);
+            border-radius: 0.5rem; /* rounded-lg */
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1); /* shadow-md */
+            border: 1px solid var(--card-border-color);
+            transition: background-color 0.5s ease, border-color 0.5s ease;
+        }
+        .event-note {
+            font-style: italic;
+            color: var(--event-note-color);
+            font-weight: 600;
+        }
+        .plan-note {
+            color: var(--plan-note-color);
+        }
+        .reading-heading {
+            font-size: 1rem; /* text-base */
+            font-weight: 600; /* font-semibold */
+            color: var(--reading-heading-color);
+            margin-top: 0.75rem; /* mt-3 */
+            margin-bottom: 0.25rem; /* mb-1 */
+        }
+        .commentary-section {
+            margin-top: 1.5rem; /* mt-6 */
+            padding-top: 1rem; /* pt-4 */
+            border-top: 1px solid var(--card-border-color); /* Use card border color */
+        }
+        .commentary-link {
+            display: inline-block;
+            margin: 0.25rem;
+            padding: 0.5rem 1rem; /* px-4 py-2 */
+            background-color: var(--link-bg-color);
+            color: var(--link-text-color);
+            border: 1px solid var(--link-border-color);
+            border-radius: 0.375rem; /* rounded-md */
+            font-size: 0.875rem; /* text-sm */
+            font-weight: 500;
+            text-decoration: none;
+            transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+        }
+        .commentary-link:hover {
+            background-color: var(--link-hover-bg-color);
+            color: var(--link-hover-text-color);
+        }
+        .search-container {
+            margin-bottom: 1.5rem; /* mb-6 */
+            padding-bottom: 1rem; /* pb-4 */
+            border-bottom: 1px solid var(--card-border-color); /* Use card border color */
+            display: flex; /* Use flexbox for alignment */
+            align-items: center; /* Align items vertically */
+            justify-content: center; /* Center items horizontally */
+            flex-wrap: wrap; /* Allow wrapping on small screens */
+        }
+        .search-label {
+             margin-right: 0.5rem; /* mr-2 */
+             margin-bottom: 0.5rem; /* Add margin below label on wrap */
+             flex-shrink: 0; /* Prevent label from shrinking */
+             color: var(--search-label-color);
+             font-size: 0.875rem; /* text-sm */
+             font-weight: 500;
+        }
+        .search-input-date { /* Updated class name */
+            padding: 0.5rem 0.75rem; /* py-2 px-3 */
+            border: 1px solid var(--input-border-color);
+            border-radius: 0.375rem; /* rounded-md */
+            margin-right: 0.5rem; /* mr-2 */
+            margin-bottom: 0.5rem; /* Add margin below input on wrap */
+            background-color: var(--card-bg-color); /* Match card background */
+            color: var(--text-color); /* Match body text color */
+            transition: border-color 0.2s ease;
+        }
+        .search-button {
+            padding: 0.5rem 1rem; /* py-2 px-4 */
+            background-color: var(--button-bg-color);
+            color: var(--button-text-color);
+            border: none; /* Remove default border */
+            border-radius: 0.375rem; /* rounded-md */
+            font-weight: 600;
+            transition: background-color 0.2s ease;
+            cursor: pointer; /* Add pointer cursor */
+            margin-bottom: 0.5rem; /* Add margin below button on wrap */
+        }
+        .search-button:hover {
+            background-color: var(--button-hover-bg-color);
+        }
+        .search-result-info {
+            width: 100%; /* Take full width for the info text */
+            margin-top: 0.5rem; /* mt-2 */
+            font-size: 0.875rem; /* text-sm */
+            color: var(--info-text-color);
+            text-align: center; /* Center the info text */
+        }
+        /* Apply theme colors to specific elements */
+        h1 { color: var(--header-text-color); }
+        #headerInfo { color: var(--subheader-text-color); }
+        .reading-section {
+            background-color: var(--reading-bg-color);
+            border: 1px solid var(--reading-border-color);
+            transition: background-color 0.5s ease, border-color 0.5s ease;
+        }
+        .reading-section h2 { color: var(--reading-heading-color); }
+        #readingPassage { color: var(--reading-passage-color); }
+        #commentaryLinks h3 { color: var(--reading-heading-color); } /* Match reading heading color */
+        .footer-note { /* Class for the footer note */
+             margin-top: 1.5rem; /* mt-6 */
+             font-size: 0.75rem; /* text-xs */
+             color: var(--footer-text-color);
+        }
+
+    </style>
+</head>
+<body class="flex justify-center items-start min-h-screen py-8 px-4"> <div class="w-full max-w-xl card p-6 md:p-8 text-center">
+        <h1 class="text-2xl md:text-3xl font-semibold mb-2">Daily Bible Reading</h1>
+        <p class="text-lg mb-6" id="headerInfo">Loading date...</p>
+
+        <div class="search-container">
+            <label for="dateSearchInput" class="search-label">Show reading for date:</label>
+            <input type="date" id="dateSearchInput" class="search-input-date">
+            <button id="searchButton" class="search-button">Show Reading</button>
+            <p id="searchResultInfo" class="search-result-info"></p>
+        </div>
+
+        <div class="reading-section bg-slate-100 p-4 rounded-md border border-slate-300">
+            <h2 class="text-xl font-semibold mb-2">Reading:</h2>
+            <p id="readingPassage" class="text-lg md:text-xl">Loading...</p>
+            <p id="readingHeading" class="reading-heading"></p>
+            <p id="readingNote" class="text-sm mt-1"></p> </div>
+
+        <div id="commentaryLinks" class="commentary-section">
+            <h3 class="text-lg font-semibold mb-2">Commentaries & Resources:</h3>
+            <div id="linksContainer" class="flex flex-wrap justify-center">
+                 </div>
+             <p class="mt-2 text-xs text-slate-400">
+                 Commentary links may point to the specific chapter or a general index. Other links point to devotional resources.
+             </p>
+        </div>
+         <p class="footer-note"> Note: This app provides a daily reading based on a chronological reading plan (derivative of the M'Cheyne plan) with devotional/study helps and seasonal theming.
+         </p>
+    </div>
+
+    <script>
+        // --- DOM Elements ---
+        const readingPassageEl = document.getElementById('readingPassage');
+        const readingHeadingEl = document.getElementById('readingHeading');
+        const readingNoteEl = document.getElementById('readingNote');
+        const linksContainerEl = document.getElementById('linksContainer');
+        const headerInfoEl = document.getElementById('headerInfo');
+        const searchInputEl = document.getElementById('dateSearchInput');
+        const searchButtonEl = document.getElementById('searchButton');
+        const searchResultInfoEl = document.getElementById('searchResultInfo');
+        const bodyEl = document.body; // Get body element for theme class
+
+        // --- M'Cheyne Reading Plan Data (as provided by user - truncated for brevity) ---
+        const mcheynePlanRaw = `
+Jan 1: Gen 1-3
+Jan 2: Gen 4-7
+Jan 3: Gen 8-11
+Jan 4: Job 1-5
+Jan 5: Job 6-9
+Jan 6: Job 10-13
+Jan 7: Job 14-16
+Jan 8: Job 17-20
+Jan 9: Job 21-23
+Jan 10: Job 24-28
+Jan 11: Job 29-31
+Jan 12: Job 32-34
+Jan 13: Job 35-37
+Jan 14: Job 38-39
+Jan 15: Job 40-42
+Jan 16: Gen 12-15
+Jan 17: Gen 16-18
+Jan 18: Gen 19-21
+Jan 19: Gen 22-24
+Jan 20: Gen 25-26
+Jan 21: Gen 27-29
+Jan 22: Gen 30-31
+Jan 23: Gen 32-34
+Jan 24: Gen 35-37
+Jan 25: Gen 38-40
+Jan 26: Gen 41-42
+Jan 27: Gen 43-45
+Jan 28: Gen 46-47
+Jan 29: Gen 48-50
+Jan 30: Ex 1-3
+Jan 31: Ex 4-6
+Feb 1: Ex 7-9
+Feb 2: Ex 10-12
+Feb 3: Ex 13-15
+Feb 4: Ex 16-18
+Feb 5: Ex 19-21
+Feb 6: Ex 22-24
+Feb 7: Ex 25-27
+Feb 8: Ex 28-29
+Feb 9: Ex 30-32
+Feb 10: Ex 33-35
+Feb 11: Ex 36-38
+Feb 12: Ex 39-40
+Feb 13: Lev 1-4
+Feb 14: Lev 5-7
+Feb 15: Lev 8-10
+Feb 16: Lev 11-13
+Feb 17: Lev 14-15
+Feb 18: Lev 16-18
+Feb 19: Lev 19-21
+Feb 20: Lev 22-23
+Feb 21: Lev 24-25
+Feb 22: Lev 26-27
+Feb 23: Num 1-2
+Feb 24: Num 3-4
+Feb 25: Num 5-6
+Feb 26: Num 7
+Feb 27: Num 8-10
+Feb 28/29: Num 11-13
+Mar 1: Num 14-15; Ps 90
+Mar 2: Num 16-17
+Mar 3: Num 18-20
+Mar 4: Num 21-22
+Mar 5: Num 23-25
+Mar 6: Num 26-27
+Mar 7: Num 28-30
+Mar 8: Num 31-32
+Mar 9: Num 33-34
+Mar 10: Num 35-36
+Mar 11: Deut 1-2
+Mar 12: Deut 3-4
+Mar 13: Deut 5-7
+Mar 14: Deut 8-10
+Mar 15: Deut 11-13
+Mar 16: Deut 14-16
+Mar 17: Deut 17-20
+Mar 18: Deut 21-23
+Mar 19: Deut 24-27
+Mar 20: Deut 28-29
+Mar 21: Deut 30-31
+Mar 22: Deut 32-34; Ps 91
+Mar 23: Josh 1-4
+Mar 24: Josh 5-8
+Mar 25: Josh 9-11
+Mar 26: Josh 12-15
+Mar 27: Josh 16-18
+Mar 28: Josh 19-21
+Mar 29: Josh 22-24
+Mar 30: Jud 1-2
+Mar 31: Jud 3-5
+Apr 1: Jud 6-7
+Apr 2: Jud 8-9
+Apr 3: Jud 10-12
+Apr 4: Jud 13-15
+Apr 5: Jud 16-18
+Apr 6: Jud 19-21
+Apr 7: Ruth
+Apr 8: 1Sam 1-3
+Apr 9: 1Sam 4-8
+Apr 10: 1Sam 9-12
+Apr 11: 1Sam 13-14
+Apr 12: 1Sam 15-17
+Apr 13: 1Sam 18-20; Ps 11/59
+Apr 14: 1Sam 21-24
+Apr 15: Ps 7/27/31/34/52
+Apr 16: Ps 56/120/140-142
+Apr 17: 1Sam 25-27
+Apr 18: Ps 17/35/54/63
+Apr 19: 1Sam 28-31; Ps 18
+Apr 20: Ps 121/123-125/128-130
+Apr 21: 2Sam 1-4
+Apr 22: Ps 6/8-10/14/16/19/21
+Apr 23: 1Chron 1-2
+Apr 24: Ps 43-45/49/84-85/87
+Apr 25: 1Chron 3-5
+Apr 26: Ps 73/77-78
+Apr 27: 1Chron 6
+Apr 28: Ps 81/88/92-93
+Apr 29: 1Chron 7-10
+Apr 30: Ps 102-104
+May 1: 2Sam 5:1-10; 1Chron 11-12
+May 2: Ps 133
+May 3: Ps 106-107
+May 4: 2Sam 5:11-6:23; 1Chron 13-16
+May 5: Ps 1-2/15/22-24/47/68
+May 6: Ps 89/96/100-101/105/132
+May 7: 2Sam 7; 1Chron 17
+May 8: Ps 25/29/33/36/39
+May 9: 2Sam 8-9; 1Chron 18
+May 10: Ps 50/53/60/75
+May 11: 2Sam 10; 1Chron 19; Ps 20
+May 12: Ps 65-67/69-70
+May 13: 2Sam 11-12; 1Chron 20
+May 14: Ps 32/51/86/122
+May 15: 2Sam 13-15
+May 16: Ps 3-4/12-13/28/55
+May 17: 2Sam 16-18
+May 18: Ps 26/40/58/61-62/64
+May 19: 2Sam 19-21
+May 20: Ps 5/38/41-42
+May 21: Ps 22-23/57
+May 22: Ps 95/97-99
+May 23: 2Sam 24; 1Chron 21-22; Ps 30
+May 24: Ps 108-110
+May 25: 1Chron 23-25
+May 26: Ps 131/138-139/143-145
+May 27: 1Chron 26-29; Ps 127
+May 28: Ps 111-118
+May 29: 1King 1-2; Ps 37/71/94
+May 30: Ps 119:1-88
+May 31: 1King 3-4; 2Chron 1; Ps 72
+Jun 1: Ps 119:89-176
+Jun 2: Solomon
+Jun 3: Prov 1-3
+Jun 4: Prov 4-6
+Jun 5: Prov 7-9
+Jun 6: Prov 10-12
+Jun 7: Prov 13-15
+Jun 8: Prov 16-18
+Jun 9: Prov 19-21
+Jun 10: Prov 22-24
+Jun 11: 1King 5-6; 2Chron 2-3
+Jun 12: 1King 7; 2Chron 4
+Jun 13: 1King 8; 2Chron 5
+Jun 14: 2Chron 6-7; Ps 136
+Jun 15: Ps 134/146-150
+Jun 16: 1King 9; 2Chron 8
+Jun 17: Prov 25-26
+Jun 18: Prov 27-29
+Jun 19: Ecc 1-6
+Jun 20: Ecc 7-12
+Jun 21: 1King 10-11; 2Chron 9
+Jun 22: Prov 30-31
+Jun 23: 1King 12-14
+Jun 24: 2Chron 10-12
+Jun 25: 1King 15:1-24; 2Chron 13-16
+Jun 26: 1King 15:25-16:34; 2Chron 17
+Jun 27: 1King 17-19
+Jun 28: 1King 20-21
+Jun 29: 1King 22; 2Chron 18
+Jun 30: 2Chron 19-23
+Jul 1: Oba; Ps 82-83
+Jul 2: 2King 1-4
+Jul 3: 2King 5-8
+Jul 4: 2King 9-11
+Jul 5: 2King 12-13; 2Chron 24
+Jul 6: 2King 14; 2Chron 25
+Jul 7: Jonah
+Jul 8: 2King 15; 2Chron 26
+Jul 9: Is 1-4
+Jul 10: Is 5-8
+Jul 11: Amos 1-5
+Jul 12: Amos 6-9
+Jul 13: 2Chron 27; Is 9-12
+Jul 14: Micah
+Jul 15: 2Chron 28; 2King 16-17
+Jul 16: Is 13-17
+Jul 17: Is 18-22
+Jul 18: Is 23-27
+Jul 19: 2King 18:1-8; 2Chron 29-31; Ps 48
+Jul 20: Hos 1-7
+Jul 21: Hos 8-14
+Jul 22: Is 28-30
+Jul 23: Is 31-34
+Jul 24: Is 35-36
+Jul 25: Is 37-39; Ps 76
+Jul 26: Is 40-43
+Jul 27: Is 44-48
+Jul 28: 2King 18:9-19:37; Ps 46/80/135
+Jul 29: Is 49-53
+Jul 30: Is 54-58
+Jul 31: Is 59-63
+Aug 1: Is 64-66
+Aug 2: 2King 20-21
+Aug 3: 2Chron 32-33
+Aug 4: Nahum
+Aug 5: 2King 22-23; 2Chron 34-35
+Aug 6: Zephaniah
+Aug 7: Jer 1-3
+Aug 8: Jer 4-6
+Aug 9: Jer 7-9
+Aug 10: Jer 10-13
+Aug 11: Jer 14-17
+Aug 12: Jer 18-22
+Aug 13: Jer 23-25
+Aug 14: Jer 26-29
+Aug 15: Jer 30-31
+Aug 16: Jer 32-34
+Aug 17: Jer 35-37
+Aug 18: Jer 38-40; Ps 74/79
+Aug 19: 2King 24-25; 2Chron 36
+Aug 20: Habakkuk
+Aug 21: Jer 41-45
+Aug 22: Jer 46-48
+Aug 23: Jer 49-50
+Aug 24: Jer 51-52
+Aug 25: Lam 1:1-3:36
+Aug 26: Lam 3:37-5:22
+Aug 27: Ezek 1-4
+Aug 28: Ezek 5-8
+Aug 29: Ezek 9-12
+Aug 30: Ezek 13-15
+Aug 31: Ezek 16-17
+Sep 1: Ezek 18-19
+Sep 2: Ezek 20-21
+Sep 3: Ezek 22-23
+Sep 4: Ezek 24-27
+Sep 5: Ezek 28-31
+Sep 6: Ezek 32-34
+Sep 7: Ezek 35-37
+Sep 8: Ezek 38-39
+Sep 9: Ezek 40-41
+Sep 10: Ezek 42-43
+Sep 11: Ezek 44-45
+Sep 12: Ezek 46-48
+Sep 13: Joel
+Sep 14: Dan 1-3
+Sep 15: Dan 4-6
+Sep 16: Dan 7-9
+Sep 17: Dan 10-12
+Sep 18: Ezra 1-3
+Sep 19: Ezra 4-6; Ps 137
+Sep 20: Haggai
+Sep 21: Zech 1-7
+Sep 22: Zech 8-14
+Sep 23: Est 1-5
+Sep 24: Est 6-10
+Sep 25: Ezra 7-10
+Sep 26: Neh 1-5
+Sep 27: Neh 6-7
+Sep 28: Neh 8-10
+Sep 29: Neh 11-13; Ps 126
+Sep 30: Malachi
+Oct 1: Luke 1; John 1:1-14
+Oct 2: Matt 1; Luke 2:1-38
+Oct 3: Matt 2; Luke 2:39-52
+Oct 4: Matt 3; Mark 1; Luke 3
+Oct 5: Matt 4; Luke 4-5; John 1:15-51
+Oct 6: John 2-4
+Oct 7: Mark 2
+Oct 8: John 5
+Oct 9: Matt 12:1-21; Mark 3; Luke 6
+Oct 10: Matt 5-7
+Oct 11: Matt 8:1-13; Luke 7
+Oct 12: Matt 11
+Oct 13: Matt 12:22-50; Luke 11
+Oct 14: Matt 13; Luke 8
+Oct 15: Matt 8:14-34; Mark 4-5
+Oct 16: Matt 9-10
+Oct 17: Matt 14; Mark 6; Luke 9:1-17
+Oct 18: John 6
+Oct 19: Matt 15; Mark 7
+Oct 20: Matt 16; Mark 8; Luke 9:18-27
+Oct 21: Matt 17; Mark 9; Luke 9:28-62
+Oct 22: Matt 18
+Oct 23: John 7-8
+Oct 24: John 9:1-10:21
+Oct 25: Luke 10-11; John 10:22-42
+Oct 26: Luke 12-13
+Oct 27: Luke 14-15
+Oct 28: Luke 16-17:10
+Oct 29: John 11
+Oct 30: Luke 17:11-18:14
+Oct 31: Matt 19; Mark 10
+Nov 1: Matt 20-21
+Nov 2: Luke 18:15-19:48
+Nov 3: Mark 11; John 12
+Nov 4: Matt 22; Mark 12
+Nov 5: Matt 23; Luke 20-21
+Nov 6: Mark 13
+Nov 7: Matt 24
+Nov 8: Matt 25
+Nov 9: Matt 26; Mark 14
+Nov 10: Luke 22; John 13
+Nov 11: John 14-17
+Nov 12: Matt 27; Mark 15
+Nov 13: Luke 23; John 18-19
+Nov 14: Matt 28; Mark 16
+Nov 15: Luke 24; John 20-21
+Nov 16: Acts 1-3
+Nov 17: Acts 4-6
+Nov 18: Acts 7-8
+Nov 19: Acts 9-10
+Nov 20: Acts 11-12
+Nov 21: Acts 13-14
+Nov 22: James
+Nov 23: Acts 15-16
+Nov 24: Gal 1-3
+Nov 25: Gal 4-6
+Nov 26: Acts 17-18:18
+Nov 27: 1/2Thess
+Nov 28: Acts 18:19-19:41
+Nov 29: 1Cor 1-4
+Nov 30: 1Cor 5-8
+Dec 1: 1Cor 9-11
+Dec 2: 1Cor 12-14
+Dec 3: 1Cor 15-16
+Dec 4: 2Cor 1-4
+Dec 5: 2Cor 5-9
+Dec 6: 2Cor 10-13
+Dec 7: Acts 20:1-3; Rom 1-3
+Dec 8: Rom 4-7
+Dec 9: Rom 8-10
+Dec 10: Rom 11-13
+Dec 11: Rom 14-16
+Dec 12: Acts 20:4-23:35
+Dec 13: Acts 24-26
+Dec 14: Acts 27-28
+Dec 15: Colossians; Philemon
+Dec 16: Ephesians
+Dec 17: Philippians
+Dec 18: 1 Timothy
+Dec 19: Titus
+Dec 20: 1 Peter
+Dec 21: Heb 1-6
+Dec 22: Heb 7-10
+Dec 23: Heb 11-13
+Dec 24: 2 Timothy
+Dec 25: 2 Peter; Jude
+Dec 26: 1 John
+Dec 27: 2/3 John
+Dec 28: Rev 1-5
+Dec 29: Rev 6-11
+Dec 30: Rev 12-18
+Dec 31: Rev 19-22
+        `;
+
+        // --- Functions ---
+
+        // Map month abbreviations to month numbers (0-indexed)
+        const monthMap = {
+            'Jan': 0, 'Feb': 1, 'Mar': 2, 'Apr': 3, 'May': 4, 'Jun': 5,
+            'Jul': 6, 'Aug': 7, 'Sep': 8, 'Oct': 9, 'Nov': 10, 'Dec': 11
+        };
+
+        // Map common abbreviations to full book names
+        const bookAbbreviationMap = {
+            'Gen': 'Genesis', 'Ex': 'Exodus', 'Lev': 'Leviticus', 'Num': 'Numbers',
+            'Deut': 'Deuteronomy', 'Josh': 'Joshua', 'Jud': 'Judges', '1Sam': '1 Samuel',
+            '2Sam': '2 Samuel', '1King': '1 Kings', '2King': '2 Kings', '1Chron': '1 Chronicles',
+            '2Chron': '2 Chronicles', 'Neh': 'Nehemiah', 'Est': 'Esther', 'Ps': 'Psalm',
+            'Prov': 'Proverbs', 'Ecc': 'Ecclesiastes', 'Solomon': 'Song of Solomon', // Handle 'Solomon'
+            'Is': 'Isaiah', 'Jer': 'Jeremiah', 'Lam': 'Lamentations', 'Ezek': 'Ezekiel',
+            'Dan': 'Daniel', 'Hos': 'Hosea', 'Oba': 'Obadiah', 'Hab': 'Habakkuk', 'Micah': 'Micah',
+            'Zech': 'Zechariah', 'Mal': 'Malachi', 'Matt': 'Matthew', 'Mark': 'Mark', 'Luke': 'Luke', 'John': 'John',
+            'Acts': 'Acts', 'Rom': 'Romans', '1Cor': '1 Corinthians', '2Cor': '2 Corinthians', 'Gal': 'Galatians',
+            'Eph': 'Ephesians', 'Phil': 'Philippians', 'Col': 'Colossians', '1Thess': '1 Thessalonians',
+            '2Thess': '2 Thessalonians', '1Tim': '1 Timothy', '2Tim': '2 Timothy', 'Heb': 'Hebrews',
+            'Jas': 'James', '1Pet': '1 Peter', '2Pet': '2 Peter', '1John': '1 John', '2John': '2 John', '3John': '3 John',
+            'Rev': 'Revelation', '1/2Thess': '1 Thessalonians; 2 Thessalonians', // Handle combined
+            '2/3 John': '2 John; 3 John', // Handle combined
+            'Ruth': 'Ruth', 'Jonah': 'Jonah', 'Joel': 'Joel', 'Amos': 'Amos', 'Nahum': 'Nahum',
+            'Zeph': 'Zephaniah', 'Hag': 'Haggai', 'Titus': 'Titus', 'Phlm': 'Philemon', 'Jude': 'Jude'
+            // Add other abbreviations if they appear in the plan
+        };
+
+        // Function to normalize book names and handle multi-book entries
+        function normalizePassageString(passageStr) {
+            let normalized = passageStr.trim();
+
+            // Handle specific combined books first
+            normalized = normalized.replace(/^1\/2Thess$/i, '1 Thessalonians; 2 Thessalonians');
+            normalized = normalized.replace(/^2\/3 John$/i, '2 John; 3 John');
+
+            // Handle 'Solomon' -> Song of Solomon (assuming full book)
+            normalized = normalized.replace(/^Solomon$/i, 'Song of Solomon 1-8');
+
+            // Handle general abbreviations using the map
+            // Split by semicolon first to handle multi-part readings
+            const parts = normalized.split(';').map(part => part.trim());
+            const processedParts = parts.map(part => {
+                // Find the first space to separate book from chapters/verses
+                const firstSpaceIndex = part.indexOf(' ');
+                if (firstSpaceIndex === -1) { // Handle single-word books like Ruth, Jonah, etc.
+                    return bookAbbreviationMap[part] || part; // Return full name or original if no abbreviation
+                }
+
+                let bookPart = part.substring(0, firstSpaceIndex);
+                const chapterPart = part.substring(firstSpaceIndex + 1);
+
+                // Handle multi-part book names like "1 Sam"
+                const potentialMultiPartBook = part.match(/^(\d\s?[A-Za-z]+)\s/);
+                if (potentialMultiPartBook) {
+                    bookPart = potentialMultiPartBook[1].replace(/\s$/, ''); // Use the matched part like "1 Sam" and remove trailing space if any
+                }
+
+                const fullBookName = bookAbbreviationMap[bookPart] || bookPart;
+                return `${fullBookName} ${chapterPart}`;
+            });
+
+            // Rejoin the processed parts
+            normalized = processedParts.join('; ');
+
+            // Handle slash notation like Ps 11/59 -> Psalm 11; Psalm 59
+            normalized = normalized.replace(/([A-Za-z\s]+\s?\d+)\/(\d+)/g, (match, p1, p2) => {
+                 // Extract book name from p1
+                 const bookMatch = p1.match(/^(\d?\s?[A-Za-z\s]+)\s+\d+$/);
+                 const bookName = bookMatch ? bookMatch[1].trim() : p1.split(' ')[0]; // Fallback if regex fails
+                 return `${p1}; ${bookName} ${p2}`;
+            });
+             // Handle slash notation like Ps 7/27/31/34/52 -> Psalm 7; Psalm 27; Psalm 31; Psalm 34; Psalm 52
+             normalized = normalized.replace(/([A-Za-z\s]+\s?\d+)(\/\d+)+/g, (match, p1, ...rest) => {
+                 const bookMatch = p1.match(/^(\d?\s?[A-Za-z\s]+)\s+\d+$/);
+                 const bookName = bookMatch ? bookMatch[1].trim() : p1.split(' ')[0];
+                 let result = p1;
+                 const slashNumbers = match.match(/\/\d+/g); // Find all /number parts
+                 if (slashNumbers) {
+                      slashNumbers.forEach(numStr => {
+                           result += `; ${bookName} ${numStr.substring(1)}`; // Add book name and number (remove slash)
+                      });
+                 }
+                 return result;
+             });
+             // Handle range slash notation like Ps 140-142 -> Psalm 140-142 (no change needed here, but keep logic)
+             // The regex above handles the simple cases, more complex ones might need refinement
+
+            return normalized;
+        }
+
+
+        // Parses the raw M'Cheyne plan string into a structured array
+        function parseUserPlan(rawPlan) {
+            const lines = rawPlan.trim().split('\n');
+            const parsedData = [];
+            const monthNames = Object.keys(monthMap); // For generating headings
+
+            lines.forEach(line => {
+                const match = line.match(/^([A-Za-z]+)\s+(\d{1,2}(?:\/\d{1,2})?):\s+(.*)$/);
+                if (match) {
+                    const monthAbbr = match[1];
+                    const dayStr = match[2];
+                    let passageStr = match[3];
+
+                    const monthIndex = monthMap[monthAbbr];
+                    if (monthIndex !== undefined) {
+                         // Normalize the passage string
+                         const normalizedPassage = normalizePassageString(passageStr);
+
+                         // Handle Feb 28/29
+                         if (monthAbbr === 'Feb' && dayStr === '28/29') {
+                              parsedData.push({ month: monthIndex, day: 28, isFeb29Reading: true, passage: normalizedPassage, heading: `Reading for Feb 28/29` });
+                         } else {
+                              const day = parseInt(dayStr, 10);
+                              if (!isNaN(day)) {
+                                   parsedData.push({ month: monthIndex, day: day, isFeb29Reading: false, passage: normalizedPassage, heading: `Reading for ${monthAbbr} ${day}` });
+                              }
+                         }
+                    } else {
+                         console.warn(`Could not parse month: ${monthAbbr} in line: ${line}`);
+                    }
+                } else {
+                     console.warn(`Could not parse line: ${line}`);
+                }
+            });
+            return parsedData;
+        }
+
+        // --- Pre-parsed Plan Data ---
+        // Parse the raw plan data once when the script loads
+        const parsedMcheynePlan = parseUserPlan(mcheynePlanRaw);
+
+
+        // Calculates the day number of the year (1-366) using UTC
+        function getDayOfYear(date) {
+            const startOfYear = Date.UTC(date.getUTCFullYear(), 0, 0);
+            const todayUTC = Date.UTC(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate());
+            const oneDay = 1000 * 60 * 60 * 24;
+            return Math.floor((todayUTC - startOfYear) / oneDay);
+        }
+
+        // Checks if a year is a leap year
+        function isLeapYear(year) {
+            return (year % 4 === 0 && year % 100 !== 0) || year % 400 === 0;
+        }
+
+        // --- Liturgical Date Calculations ---
+
+        // Calculate Easter date (Meeus/Jones/Butcher algorithm - Gregorian) - Returns UTC Date
+        function calculateEaster(year) {
+             const a = year % 19;
+             const b = Math.floor(year / 100);
+             const c = year % 100;
+             const d = Math.floor(b / 4);
+             const e = b % 4;
+             const f = Math.floor((b + 8) / 25);
+             const g = Math.floor((b - f + 1) / 3);
+             const h = (19 * a + b - d - g + 15) % 30;
+             const i = Math.floor(c / 4);
+             const k = c % 4;
+             const l = (32 + 2 * e + 2 * i - h - k) % 7;
+             const m = Math.floor((a + 11 * h + 22 * l) / 451);
+             const month = Math.floor((h + l - 7 * m + 114) / 31); // Month (1-12)
+             const day = ((h + l - 7 * m + 114) % 31) + 1; // Day (1-31)
+             return new Date(Date.UTC(year, month - 1, day)); // Use UTC
+        }
+
+        // Calculate Ash Wednesday - Returns UTC Date
+        function calculateAshWednesday(easterDate) {
+             const ashWednesday = new Date(easterDate);
+             ashWednesday.setUTCDate(easterDate.getUTCDate() - 46);
+             return ashWednesday;
+        }
+
+        // Calculate Pentecost - Returns UTC Date
+        function calculatePentecost(easterDate) {
+             const pentecost = new Date(easterDate);
+             pentecost.setUTCDate(easterDate.getUTCDate() + 49); // 49 days after Easter Sunday
+             return pentecost;
+        }
+
+        // Calculate First Sunday of Advent - Returns UTC Date
+        function calculateAdventSunday(year) {
+             const christmas = new Date(Date.UTC(year, 11, 25));
+             const christmasDayOfWeek = christmas.getUTCDay(); // 0=Sun, 1=Mon, ..., 6=Sat
+             // Days to subtract to get to the previous Sunday (or Christmas itself if it's a Sunday)
+             const daysToPreviousSunday = christmasDayOfWeek === 0 ? 7 : christmasDayOfWeek;
+             const fourthSundayBefore = new Date(christmas);
+             // Go back 3 full weeks (21 days) plus the days to get to the previous Sunday
+             fourthSundayBefore.setUTCDate(christmas.getUTCDate() - 21 - daysToPreviousSunday);
+             return fourthSundayBefore;
+        }
+
+        // Get Liturgical Season for a given UTC Date
+        function getLiturgicalSeason(date) {
+            const year = date.getUTCFullYear();
+            const month = date.getUTCMonth(); // 0-11
+            const day = date.getUTCDate(); // 1-31
+
+            // Calculate key liturgical dates for the *current* year
+            const easterDate = calculateEaster(year);
+            const ashWednesday = calculateAshWednesday(easterDate);
+            const pentecost = calculatePentecost(easterDate);
+            const adventSunday = calculateAdventSunday(year);
+
+            // Calculate key dates for the *previous* year to handle year wrap-around for Christmas/Epiphany
+            const prevYearAdventSunday = calculateAdventSunday(year - 1);
+
+            // Define date boundaries (using UTC for comparison)
+            // Note: End dates are exclusive (season ends the day *before*)
+            const christmasStart = new Date(Date.UTC(year, 11, 25)); // Dec 25
+            const epiphanyStart = new Date(Date.UTC(year, 0, 6)); // Jan 6
+            const lentStart = ashWednesday;
+            const easterStart = easterDate;
+            const pentecostStart = pentecost;
+            const fallStart = new Date(Date.UTC(year, 8, 1)); // Sep 1
+            const adventStart = adventSunday;
+
+            // Calculate end dates based on the start of the next season
+            const christmasEnd = new Date(epiphanyStart); // Christmas ends when Epiphany starts
+            const epiphanyEnd = new Date(lentStart); // Epiphany ends when Lent starts
+            const lentEnd = new Date(easterStart); // Lent ends when Easter starts
+            const easterEnd = new Date(pentecostStart); // Easter ends when Pentecost starts
+            const summerEnd = new Date(fallStart); // Summer (Ordinary Time 1) ends when Fall starts
+            const fallEnd = new Date(adventStart); // Fall (Ordinary Time 2) ends when Advent starts
+            const adventEnd = new Date(christmasStart); // Advent ends when Christmas starts
+
+            // --- Season Determination Logic ---
+
+            // Check Advent (late Nov/Dec of current year OR late Nov/Dec of previous year if date is early Jan)
+            if (date >= adventStart && date < adventEnd) return 'Advent';
+            // Check if date is in Jan and belongs to the *previous* year's Advent cycle
+            if (month === 11 && date >= 25) { // If it's Dec 25 or later, it could be Christmas
+                 // Check if it's before Jan 6 of next year
+                 const nextYearEpiphany = new Date(Date.UTC(year + 1, 0, 6));
+                 if (date < nextYearEpiphany) return 'Christmas';
+            }
+
+            // Check Christmas (Dec 25 to Jan 5)
+            // Handle year wrap: check Dec 25-31 of current year OR Jan 1-5 of current year
+            const currentYearChristmasStart = new Date(Date.UTC(year, 11, 25));
+            const currentYearChristmasEnd = new Date(Date.UTC(year + 1, 0, 6)); // Ends before Jan 6 of next year
+            if (date >= currentYearChristmasStart && date < currentYearChristmasEnd) return 'Christmas';
+             // Check if the date is Jan 1-5, which belongs to the previous year's Christmas cycle
+            const thisYearEpiphanyStart = new Date(Date.UTC(year, 0, 6));
+            if (date < thisYearEpiphanyStart) { // If date is before Jan 6
+                // It must be part of the Christmas season that started last year
+                // Check if it's after last year's Christmas start (Dec 25) - this check might be redundant
+                // but ensures we are in the correct period.
+                const lastYearChristmasStart = new Date(Date.UTC(year - 1, 11, 25));
+                if (date >= lastYearChristmasStart) return 'Christmas';
+            }
+
+
+            // Check Epiphany (Jan 6 to day before Ash Wednesday)
+            if (date >= epiphanyStart && date < epiphanyEnd) return 'Epiphany';
+
+            // Check Lent (Ash Wednesday to day before Easter)
+            if (date >= lentStart && date < lentEnd) return 'Lent';
+
+            // Check Easter (Easter Sunday to day before Pentecost)
+            if (date >= easterStart && date < easterEnd) return 'Easter';
+
+            // Check Summer / Ordinary Time 1 (Pentecost to Aug 31)
+            if (date >= pentecostStart && date < summerEnd) return 'Summer';
+
+            // Check Fall / Ordinary Time 2 (Sep 1 to day before Advent Sunday)
+            if (date >= fallStart && date < fallEnd) return 'Fall';
+
+            // Check Spring / Ordinary Time (Post-Epiphany, Pre-Lent)
+            // This fills the gap between Epiphany end and Lent start
+             if (date >= epiphanyEnd && date < lentStart) return 'Spring'; // This logic seems off. Let's rethink.
+
+            /*
+            Revised Season Order Check:
+            1. Advent (Advent Sunday -> Dec 24)
+            2. Christmas (Dec 25 -> Jan 5)
+            3. Epiphany (Jan 6 -> Day before Ash Wednesday)
+            4. Lent (Ash Wednesday -> Day before Easter)
+            5. Easter (Easter -> Day before Pentecost)
+            6. Summer (Pentecost -> Aug 31)
+            7. Fall (Sep 1 -> Day before Advent Sunday)
+            8. Spring (This doesn't fit cleanly in the standard liturgical calendar this way)
+
+            Let's redefine:
+            - Christmas: Dec 25 - Jan 5
+            - Epiphany Season (Ordinary Time): Jan 6 - Day before Lent. Use 'Spring' theme here.
+            - Lent: Ash Wed - Day before Easter
+            - Easter Season: Easter - Day before Pentecost
+            - Ordinary Time (Post-Pentecost): Pentecost - Day before Advent. Split this into Summer/Fall.
+                - Summer: Pentecost -> Aug 31
+                - Fall: Sep 1 -> Day before Advent
+            - Advent: Advent Sun - Dec 24
+            */
+
+            // --- Revised Season Determination Logic ---
+
+            // Check Advent (Handles year wrap correctly via adventStart calculation)
+            if (date >= adventStart && date < new Date(Date.UTC(year, 11, 25))) return 'Advent';
+
+            // Check Christmas (Dec 25 to Jan 5)
+            const christmasDay = new Date(Date.UTC(year, 11, 25));
+            const dayAfterEpiphany = new Date(Date.UTC(year, 0, 6)); // Jan 6
+            // If date is Dec 25 or later in the year
+            if (month === 11 && day >= 25) return 'Christmas';
+            // If date is Jan 1-5
+            if (month === 0 && day < 6) return 'Christmas';
+
+
+            // Check Epiphany Season / Spring (Jan 6 to day before Ash Wednesday)
+            if (date >= dayAfterEpiphany && date < lentStart) return 'Spring'; // Use Spring theme
+
+            // Check Lent (Ash Wednesday to day before Easter)
+            if (date >= lentStart && date < easterStart) return 'Lent';
+
+            // Check Easter Season (Easter Sunday to day before Pentecost)
+            if (date >= easterStart && date < pentecostStart) return 'Easter';
+
+            // Check Ordinary Time (Post-Pentecost)
+            if (date >= pentecostStart && date < adventStart) {
+                // Split into Summer and Fall
+                const sep1 = new Date(Date.UTC(year, 8, 1)); // September 1st
+                if (date < sep1) {
+                    return 'Summer'; // Pentecost to Aug 31
+                } else {
+                    return 'Fall'; // Sep 1 to Advent Sunday
+                }
+            }
+
+            // Fallback (should not be reached with comprehensive checks)
+            console.warn("Could not determine liturgical season for date:", date.toISOString());
+            return 'Summer'; // Default to Summer theme
+        }
+
+
+        // Apply theme class to body
+        function applyTheme(season) {
+            // Remove existing theme classes
+            bodyEl.className = bodyEl.className.replace(/\btheme-\S+/g, '');
+            // Add new theme class
+            if (season) {
+                bodyEl.classList.add(`theme-${season.toLowerCase()}`);
+                console.log("Applied theme:", `theme-${season.toLowerCase()}`);
+            } else {
+                 console.log("No season determined, using default theme (Summer).");
+                 // Default theme is applied via :root, no class needed unless explicitly adding theme-summer
+            }
+        }
+
+
+        // Generate the full reading plan for a specific year using the parsed M'Cheyne data
+        function generatePlanForYear(year) {
+            const plan = {}; // Use object { dayNumber: { passage, heading, note, type } }
+            const leap = isLeapYear(year);
+            const daysInYear = leap ? 366 : 365;
+
+            // Populate the plan object from the parsed M'Cheyne data
+            parsedMcheynePlan.forEach(item => {
+                let dayNumber;
+                // Handle Feb 28/29 specifically
+                if (item.isFeb29Reading) {
+                    // In a leap year, this reading is for Feb 29 (day 60)
+                    // In a non-leap year, this reading is for Feb 28 (day 59)
+                    dayNumber = leap ? 60 : 59;
+                } else {
+                    // Calculate day number for other dates
+                    // Create a UTC date object for the specific year
+                    const dateForEntry = new Date(Date.UTC(year, item.month, item.day));
+                    dayNumber = getDayOfYear(dateForEntry);
+                }
+
+                if (dayNumber >= 1 && dayNumber <= daysInYear) {
+                    plan[dayNumber] = {
+                        passage: item.passage,
+                        heading: item.heading,
+                        note: "Daily reading.", // Default note
+                        type: "plan" // Mark as standard plan reading
+                    };
+                }
+            });
+
+            // --- Apply Overrides for Holy Week and Christmas ---
+            const easterDate = calculateEaster(year);
+            const goodFridayDate = new Date(easterDate);
+            goodFridayDate.setUTCDate(easterDate.getUTCDate() - 2);
+            const maundyThursdayDate = new Date(easterDate);
+            maundyThursdayDate.setUTCDate(easterDate.getUTCDate() - 3);
+            const palmSundayDate = new Date(easterDate);
+            palmSundayDate.setUTCDate(easterDate.getUTCDate() - 7);
+            const christmasDate = new Date(Date.UTC(year, 11, 25)); // December 25th (UTC)
+
+            const eventOverrides = {};
+            // Use specific passages for these events
+            eventOverrides[getDayOfYear(palmSundayDate)] = { passage: normalizePassageString("Matt 21:1-17"), heading: "Triumphal Entry", note: "Palm Sunday", type: "event" };
+            eventOverrides[getDayOfYear(maundyThursdayDate)] = { passage: normalizePassageString("Luke 22:1-38"), heading: "The Last Supper", note: "Maundy Thursday", type: "event" };
+            eventOverrides[getDayOfYear(goodFridayDate)] = { passage: normalizePassageString("John 18-19"), heading: "Arrest & Crucifixion", note: "Good Friday", type: "event" };
+            eventOverrides[getDayOfYear(easterDate)] = { passage: normalizePassageString("Luke 24:1-35"), heading: "The Resurrection", note: "Easter Sunday", type: "event" };
+            eventOverrides[getDayOfYear(christmasDate)] = { passage: normalizePassageString("Luke 2:1-20"), heading: "The Birth of Jesus", note: "Christmas Day", type: "event" };
+
+            // Apply the overrides, replacing any existing plan entry for that day
+            for (const dayNum in eventOverrides) {
+                if (plan[dayNum]) { // Check if the day exists in the plan
+                    plan[dayNum] = eventOverrides[dayNum];
+                } else {
+                    console.warn(`Override day ${dayNum} not found in base plan for year ${year}. Adding override.`);
+                    // If the day didn't exist (e.g., Dec 31 override on non-leap year), add it
+                    plan[dayNum] = eventOverrides[dayNum];
+                }
+            }
+
+            // console.log(`Generated plan for ${year} using M'Cheyne schedule with event overrides.`);
+            return plan;
+        }
+
+
+        // Parses passage string (e.g., "Genesis 1-3") -> { book: "Genesis", chapter: 1 }
+        // Adjusted to handle potentially normalized book names better
+        function parsePassage(passageStr) {
+            if (!passageStr) return null;
+            // Take the first part before any semicolon
+            const firstPart = passageStr.split(';')[0].trim();
+
+             // Regex to find the book name (potentially with a leading number) and the first chapter number
+             // Allows for spaces in book names like "1 Samuel" or "Song of Solomon"
+             // Improved regex to better handle book names ending the string or followed by chapter/verse details
+             const match = firstPart.match(/^(\d?\s?[A-Za-z\s]+?)\s+(\d+)(?:[:.\-]\d+.*)?$/);
+
+            if (match && match[1] && match[2]) {
+                 const book = match[1].trim(); // Trim any extra space
+                 const chapter = parseInt(match[2], 10);
+                 // Basic check if book seems valid (contains letters)
+                 if (/[A-Za-z]/.test(book)) {
+                      return { book, chapter };
+                 }
+            }
+            // Fallback for single-book entries without chapter numbers (like 'Ruth')
+            // Check if the firstPart matches a known book name directly
+            if (Object.values(bookAbbreviationMap).includes(firstPart) || bookAbbreviationMap[firstPart]) {
+                 return { book: bookAbbreviationMap[firstPart] || firstPart, chapter: 1 }; // Default to chapter 1
+            }
+
+            console.warn("Could not parse passage for commentary link:", passageStr, " First part:", firstPart);
+            return null; // Return null if parsing fails
+        }
+
+        // Generates commentary and resource URLs
+        function generateCommentaryLinks(parsedPassage) {
+            // Define static resource links
+            const matthewHenryUrl = "https://biblesnet.com/matthew_henry_commentary/MHC00000.HTM";
+            const spurgeonUrl = "https://biblesnet.com/morneve.pdf";
+            const promisesUrl = "https://biblesnet.com/biblepromises.pdf";
+
+            // Initialize links array with static resources
+            let links = [
+                { name: "Matthew Henry", url: matthewHenryUrl },
+                { name: "Spurgeon's M&E", url: spurgeonUrl },
+                { name: "Precious Promises", url: promisesUrl }
+            ];
+
+            // Add dynamic commentary links if the passage was parsed successfully
+            if (parsedPassage) {
+                const { book, chapter } = parsedPassage;
+                // Format book name for StudyLight URLs (lowercase, space -> +)
+                // Need to be careful with names like "Song of Solomon"
+                let studyLightBook = book.toLowerCase().replace(/\s+/g, '+');
+                // Specific replacements for StudyLight format
+                if (studyLightBook === 'song+of+solomon') studyLightBook = 'song';
+                if (studyLightBook === 'psalm') studyLightBook = 'psalms'; // StudyLight uses 'psalms'
+                if (studyLightBook.match(/^\d/)) { // Remove '+' after number (e.g., 1+samuel -> 1samuel)
+                    studyLightBook = studyLightBook.replace('+', '');
+                }
+
+
+                const studyLightBaseUrl = "https://www.studylight.org/commentaries/eng/";
+
+                // Add dynamic links to the array
+                links.push(
+                    { name: "John Calvin", url: `${studyLightBaseUrl}cal/${studyLightBook}/${chapter}.html` },
+                    { name: "John Gill", url: `${studyLightBaseUrl}geb/${studyLightBook}/${chapter}.html` },
+                    { name: "Albert Barnes", url: `${studyLightBaseUrl}bnb/${studyLightBook}/${chapter}.html` },
+                    { name: "Matthew Poole", url: `${studyLightBaseUrl}mpc/${studyLightBook}/${chapter}.html` }
+                );
+                 // console.log("Generated dynamic commentary links for:", book, chapter, `(URL segment: ${studyLightBook})`);
+            } else {
+                 console.log("Could not parse passage, only showing static resource links.");
+            }
+
+            return links;
+        }
+
+        // Displays commentary and resource links
+        function displayCommentaryLinks(links) {
+            linksContainerEl.innerHTML = ''; // Clear previous links
+            if (links && links.length > 0) {
+                links.forEach(linkInfo => {
+                    const linkElement = document.createElement('a');
+                    linkElement.href = linkInfo.url;
+                    linkElement.textContent = linkInfo.name;
+                    linkElement.className = 'commentary-link';
+                    linkElement.target = '_blank'; // Open in new tab
+                    linkElement.rel = 'noopener noreferrer'; // Security best practice
+
+                    // Add error handling for broken links (optional, basic check)
+                    linkElement.onerror = () => {
+                        console.warn(`Failed to load resource: ${linkInfo.url}`);
+                        // Optionally visually indicate the link might be broken
+                        linkElement.style.textDecoration = 'line-through';
+                        linkElement.title = 'Link might be broken';
+                    };
+
+                    linksContainerEl.appendChild(linkElement);
+                });
+            } else {
+                linksContainerEl.innerHTML = '<p class="text-sm text-slate-500">Could not generate resource links.</p>';
+            }
+        }
+
+        // --- Function to display reading for a specific day ---
+        function displayReadingForDay(dayNumber, year) {
+            // Generate the plan for the specified year *every time* to handle year changes
+            const yearPlan = generatePlanForYear(year);
+            const daysInYear = isLeapYear(year) ? 366 : 365;
+
+             // Construct the UTC date object for the *target* day
+             const dateForDay = new Date(Date.UTC(year, 0, dayNumber)); // Month is 0-indexed, day is 1-indexed
+
+            // Validate input day number
+            if (dayNumber < 1 || dayNumber > daysInYear || isNaN(dateForDay.getTime())) {
+                 const invalidDateStr = new Date(year, 0, dayNumber).toLocaleDateString(undefined, { month: 'long', day: 'numeric' }); // For display only
+                 searchResultInfoEl.textContent = `Invalid date: ${invalidDateStr}, ${year}.`;
+                 readingPassageEl.textContent = "-";
+                 readingHeadingEl.textContent = "N/A";
+                 readingNoteEl.textContent = "";
+                 // Display static links even if day is invalid
+                 displayCommentaryLinks(generateCommentaryLinks(null));
+                 // Apply a default theme or keep the current one? Let's apply default.
+                 applyTheme('Summer'); // Apply default Summer theme
+                 return;
+            }
+
+
+            // Determine liturgical season for the target date
+            const season = getLiturgicalSeason(dateForDay);
+            applyTheme(season); // Apply the theme based on the season
+
+            const readingData = yearPlan[dayNumber];
+
+            if (!readingData) {
+                console.error(`Could not find reading for day ${dayNumber} in the plan for ${year}.`);
+                readingPassageEl.textContent = "Reading not found for this day.";
+                readingHeadingEl.textContent = "Error";
+                readingNoteEl.textContent = "";
+                 // Update search info even if reading not found
+                 searchResultInfoEl.textContent = `Showing reading for ${dateForDay.toLocaleDateString(undefined, { timeZone: 'UTC', month: 'long', day: 'numeric' })} (Day ${dayNumber} of ${year}) - Season: ${season}`;
+                 // Display static links
+                 displayCommentaryLinks(generateCommentaryLinks(null));
+                return;
+            }
+
+            // Update reading display
+            readingPassageEl.textContent = readingData.passage;
+            readingHeadingEl.textContent = readingData.heading || 'Daily Reading'; // Use generated heading
+            readingNoteEl.textContent = readingData.note || ''; // Display note (e.g., "Palm Sunday")
+
+            // Update search info to show the date corresponding to the day number and the season
+            searchResultInfoEl.textContent = `Showing reading for ${dateForDay.toLocaleDateString(undefined, { timeZone: 'UTC', month: 'long', day: 'numeric' })} (Day ${dayNumber} of ${year}) - Season: ${season}`;
+
+            // Update note styling based on reading type (event or plan)
+            if (readingData.type === 'event') {
+                 readingNoteEl.className = 'text-sm mt-1 event-note'; // Base class + event class
+            } else {
+                 readingNoteEl.className = 'text-sm mt-1 plan-note'; // Base class + plan class
+            }
+
+            // Update commentary and resource links
+            const parsed = parsePassage(readingData.passage);
+            const commentaryLinks = generateCommentaryLinks(parsed);
+            displayCommentaryLinks(commentaryLinks);
+        }
+
+
+        // --- Initialization ---
+        function initializeApp() {
+            const today = new Date(); // Use local time for display formatting and default input value
+            const currentYear = today.getFullYear();
+
+            // Use UTC for consistent day number calculation and season determination
+            const nowUTC = new Date(Date.UTC(today.getUTCFullYear(), today.getUTCMonth(), today.getUTCDate()));
+            const currentDayNumber = getDayOfYear(nowUTC);
+            const daysInCurrentYear = isLeapYear(currentYear) ? 366 : 365;
+
+            // Update header text using local time format
+            headerInfoEl.textContent = `${today.toLocaleDateString(undefined, { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' })} (Day ${currentDayNumber} of ${daysInCurrentYear})`;
+
+            // Set default date for date input to today (local)
+            const yyyy = today.getFullYear();
+            const mm = String(today.getMonth() + 1).padStart(2, '0'); // Months are 0-indexed
+            const dd = String(today.getDate()).padStart(2, '0');
+            searchInputEl.value = `${yyyy}-${mm}-${dd}`;
+
+            // Display today's reading initially using the UTC-derived day number and year
+            displayReadingForDay(currentDayNumber, currentYear); // This will also set the initial theme
+
+             // Add event listener for the search button
+             searchButtonEl.addEventListener('click', () => {
+                 const searchDateStr = searchInputEl.value; // Get value as YYYY-MM-DD string
+                 if (searchDateStr) {
+                      // Create a date object using UTC to avoid timezone issues when calculating day of year
+                      const parts = searchDateStr.split('-');
+                      if (parts.length === 3) {
+                           const searchYearNum = Number(parts[0]);
+                           const searchMonthNum = Number(parts[1]); // 1-12
+                           const searchDayNumInput = Number(parts[2]); // 1-31
+
+                           // Validate numbers
+                           if (!isNaN(searchYearNum) && !isNaN(searchMonthNum) && !isNaN(searchDayNumInput) &&
+                               searchMonthNum >= 1 && searchMonthNum <= 12 && searchDayNumInput >= 1 && searchDayNumInput <= 31)
+                           {
+                                // Construct UTC date ONLY for calculation purposes
+                                const searchDateUTC = new Date(Date.UTC(searchYearNum, searchMonthNum - 1, searchDayNumInput));
+
+                                // Final check: Does the constructed UTC date match the input numbers?
+                                // This catches invalid dates like Feb 30th.
+                                if (!isNaN(searchDateUTC.getTime()) &&
+                                    searchDateUTC.getUTCFullYear() === searchYearNum &&
+                                    searchDateUTC.getUTCMonth() === searchMonthNum - 1 &&
+                                    searchDateUTC.getUTCDate() === searchDayNumInput)
+                                {
+                                     const searchYear = searchDateUTC.getUTCFullYear();
+                                     const searchDayOfYear = getDayOfYear(searchDateUTC);
+                                     displayReadingForDay(searchDayOfYear, searchYear);
+                                } else {
+                                     searchResultInfoEl.textContent = "Please enter a valid date.";
+                                     applyTheme('Summer'); // Reset to default theme on error
+                                }
+                           } else {
+                                searchResultInfoEl.textContent = "Please enter a valid date format (YYYY-MM-DD).";
+                                applyTheme('Summer'); // Reset to default theme on error
+                           }
+                      } else {
+                           searchResultInfoEl.textContent = "Please enter a valid date format (YYYY-MM-DD).";
+                           applyTheme('Summer'); // Reset to default theme on error
+                      }
+                 } else {
+                      searchResultInfoEl.textContent = "Please select a date.";
+                      applyTheme('Summer'); // Reset to default theme on error
+                 }
+             });
+
+             // Optional: Add event listener for Enter key in search input
+             searchInputEl.addEventListener('keypress', (event) => {
+                  if (event.key === 'Enter') {
+                       searchButtonEl.click(); // Trigger button click on Enter
+                  }
+             });
+        }
+
+        // Run the app initialization when the script loads
+        initializeApp();
+
+    </script>
+
+</body>
+</html>
